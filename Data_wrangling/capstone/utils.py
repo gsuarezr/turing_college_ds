@@ -16,7 +16,7 @@ from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 import urllib
 import requests
-
+import os
 colors = px.colors.qualitative.Plotly
 pd.options.plotting.backend = "plotly"
 
@@ -33,7 +33,7 @@ def wrangle(folder: str) -> DataDict:
 
     Stores a dictionary of Dataframes for each of the csv files in the data directory
     """
-    data_list = glob.glob(f"{folder}/*.csv")
+    data_list = glob.glob(f"{os.path.dirname(os.path.abspath(__file__))}+/{folder}/*.csv")
     names = ['case', 'patientinfo', 'policy', 'region', 'searchtrend', 'seoulfloating', 'time', 'timeage', 'timegender', 'timeprovince', 'weather']
     data_dict = {}
     for i in range(len(data_list)):
