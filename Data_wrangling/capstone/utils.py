@@ -34,7 +34,7 @@ def wrangle(folder: str) -> DataDict:
 
     Stores a dictionary of Dataframes for each of the csv files in the data directory
     """
-    data_list = glob.glob(f"/{folder}/*.csv")
+    data_list = glob.glob(f"./data/*.csv")
     names = [
         "case",
         "patientinfo",
