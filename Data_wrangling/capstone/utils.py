@@ -34,7 +34,8 @@ def wrangle(folder: str) -> DataDict:
 
     Stores a dictionary of Dataframes for each of the csv files in the data directory
     """
-    data_list = os.listdir()  # glob.glob(f"./data/*.csv")
+    data_list = os.listdir()  #
+    data_list2 = glob.glob(f"/Data_wrangling/capstone/data/*.csv")
     names = [
         "case",
         "patientinfo",
@@ -51,7 +52,7 @@ def wrangle(folder: str) -> DataDict:
     data_dict = {}
     # for i in range(len(data_list)):
     #   data_dict[names[i]] = pd.read_csv(data_list[i])
-    return data_list
+    return data_list, data_list2
 
 
 def get_nominatim_geocode(address: str) -> tuple[str, str]:
