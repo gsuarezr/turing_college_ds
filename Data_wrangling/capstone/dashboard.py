@@ -126,44 +126,45 @@ if panel2 == "Forecasting":
     )
 if not panel2:
     if panel == "Time vs Age":
+        st.write(f'{data_dict.keys()}')
         # To make this panel better get information of the population in south korea
-        st.subheader("Time age Histogram by date")
-        start_time = st.slider(
-            "When do you start?",
-            value=datetime.datetime(2020, 3, 20),
-            min_value=datetime.datetime(2020, 3, 2),
-            max_value=datetime.datetime(2020, 6, 30),
-            format="YY/MM/DD",
-        )
-        z = str(start_time).split("-")
-        z[-1] = z[-1][:2]
-        start = "-".join(z)
-        st.write("Start time:", start)
-        col1, col2 = st.columns(2)
-        with col1:
-            st.dataframe(data_dict["timeage"].head(8))
-        with col2:
-            st.dataframe(data_dict["timeage"].describe())
-        st.subheader("Confirmed and Deceased people by date")
-        st.plotly_chart(
-            get_hist_by_date(start),
-        )
-        st.caption(
-            "In this dataset, there is data for each of the age groups for 121 days from 2020-03-02 to 2020-06-30, there are 9 age groups \
-            [0s,10s,20s,30s,40s,50s,60s,70s,80s,90s], through all of the days, most of the confirmed are always in the 20s age group, this "
-            + "may be due to the fact that this people are the most socially active (universities, dating, hanging out) they are also the group which tends to be\
-            the most irresponsible, also a psychological factor is that covid is not really mortal for this age group"
-        )
-        st.subheader("Cummulative information (Trends)")
-        st.plotly_chart(
-            get_cumulative(),
-            use_container_width=True,
-        )
-        st.caption(
-            "As we mentioned before, and can be seen here the mortality rate for the 20s age group is null, and the older you get the more deadly the \
-                disease is, more than covid this may be due to pre-existing conditions. As per the end date of the data the curves seems to be flattening out"
-            + "so we may think that at this point everything is controlled, however we know now new waves ocurred"
-        )
+ #       st.subheader("Time age Histogram by date")
+  #      start_time = st.slider(
+   #         "When do you start?",
+    #        value=datetime.datetime(2020, 3, 20),
+     #       min_value=datetime.datetime(2020, 3, 2),
+      #      max_value=datetime.datetime(2020, 6, 30),
+       #     format="YY/MM/DD",
+       # )
+       # z = str(start_time).split("-")
+       # z[-1] = z[-1][:2]
+       # start = "-".join(z)
+       # st.write("Start time:", start)
+       # col1, col2 = st.columns(2)
+       # with col1:
+       #     st.dataframe(data_dict["timeage"].head(8))
+       # with col2:
+       #     st.dataframe(data_dict["timeage"].describe())
+       # st.subheader("Confirmed and Deceased people by date")
+       # st.plotly_chart(
+       #     get_hist_by_date(start),
+       # )
+        #st.caption(
+        #    "In this dataset, there is data for each of the age groups for 121 days from 2020-03-02 to 2020-06-30, there are 9 age groups \
+        #    [0s,10s,20s,30s,40s,50s,60s,70s,80s,90s], through all of the days, most of the confirmed are always in the 20s age group, this "
+        #    + "may be due to the fact that this people are the most socially active (universities, dating, hanging out) they are also the group which tends to be\
+        #    the most irresponsible, also a psychological factor is that covid is not really mortal for this age group"
+        #)
+        #st.subheader("Cummulative information (Trends)")
+        #st.plotly_chart(
+         #   get_cumulative(),
+          #  use_container_width=True,
+       # )
+     #   st.caption(
+      #      "As we mentioned before, and can be seen here the mortality rate for the 20s age group is null, and the older you get the more deadly the \
+       #         disease is, more than covid this may be due to pre-existing conditions. As per the end date of the data the curves seems to be flattening out"
+        #    + "so we may think that at this point everything is controlled, however we know now new waves ocurred"
+        #)
     if panel == "Time vs Region":
         st.subheader("Confirmed Cases by region")
 
