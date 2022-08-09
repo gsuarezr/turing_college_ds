@@ -25,6 +25,73 @@ DataDict = dict[pd.DataFrame]
 Figure = go.Figure
 
 
+def regionplot(key: str = "elderly_population_ratio") -> Figure:
+    """
+    This function returns a plot of the geographic information of the region metadata
+    """
+    data_dict = wrangle("data")
+    new = data_dict["region"]
+    mean_confirmed = new.groupby("province").mean().sort_values(by=key).reset_index()
+    fig = px.scatter_mapbox(
+        mean_confirmed,
+        lon="longitude",
+        lat="latitude",
+        hover_name="province",
+        size=key,
+        mapbox_style="stamen-toner",
+        zoom=6,
+        center={"lat": 36.302, "lon": 127.7129},
+        opacity=0.5,
+    )
+    fig.update_layout(
+        autosize=False,
+        width=400,
+        height=500,
+        margin={"r": 0, "t": 0, "l": 0, "b": 0},
+        geo={"projection": {"rotation": {"roll": 180}}},
+    )
+    return fig
+
+
+def regionplotcase() -> Figure:
+    """
+    This function returns a plot of the geographic information of the confirmed cases
+    """
+    data_dict = wrangle("data")
+    new = data_dict["case"]
+    mean_confirmed = (
+        new.groupby("province")
+        .sum()["confirmed"]
+        .sort_values()
+        .to_frame()
+        .reset_index()
+    )
+    mean_confirmed["lat-lon"] = mean_confirmed["province"].apply(
+        lambda x: get_nominatim_geocode(x)
+    )
+    mean_confirmed["lat"] = mean_confirmed["lat-lon"].apply(lambda x: x[1])
+    mean_confirmed["lon"] = mean_confirmed["lat-lon"].apply(lambda x: x[0])
+    fig = px.scatter_mapbox(
+        mean_confirmed,
+        lon="lon",
+        lat="lat",
+        hover_name="province",
+        size="confirmed",
+        mapbox_style="stamen-toner",
+        zoom=6,
+        center={"lat": 36.302, "lon": 127.7129},
+        opacity=0.5,
+    )
+    fig.update_layout(
+        autosize=False,
+        width=400,
+        height=500,
+        margin={"r": 0, "t": 0, "l": 0, "b": 0},
+        geo={"projection": {"rotation": {"roll": 180}}},
+    )
+    return fig
+
+
 def wrangle(folder: str) -> DataDict:
     """
     This function takes a string as a directory and loads all the csv files present into DataFrames,

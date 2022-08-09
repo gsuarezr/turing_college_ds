@@ -16,7 +16,6 @@ data_dict = wrangle("data")
 
 
 st.title("Covid cases in South Korea")
-
 st.sidebar.title("Covid Cases in Korea")
 panel = st.sidebar.selectbox(
     "EDA Section, There is one for each dataset please select a panel",
@@ -128,45 +127,44 @@ if panel2 == "Forecasting":
     )
 if not panel2:
     if panel == "Time vs Age":
-        st.write(f"{data_dict.keys()}")
         # To make this panel better get information of the population in south korea
-    #       st.subheader("Time age Histogram by date")
-    #      start_time = st.slider(
-    #         "When do you start?",
-    #        value=datetime.datetime(2020, 3, 20),
-    #       min_value=datetime.datetime(2020, 3, 2),
-    #      max_value=datetime.datetime(2020, 6, 30),
-    #     format="YY/MM/DD",
-    # )
-    # z = str(start_time).split("-")
-    # z[-1] = z[-1][:2]
-    # start = "-".join(z)
-    # st.write("Start time:", start)
-    # col1, col2 = st.columns(2)
-    # with col1:
-    #     st.dataframe(data_dict["timeage"].head(8))
-    # with col2:
-    #     st.dataframe(data_dict["timeage"].describe())
-    # st.subheader("Confirmed and Deceased people by date")
-    # st.plotly_chart(
-    #     get_hist_by_date(start),
-    # )
-    # st.caption(
-    #    "In this dataset, there is data for each of the age groups for 121 days from 2020-03-02 to 2020-06-30, there are 9 age groups \
-    #    [0s,10s,20s,30s,40s,50s,60s,70s,80s,90s], through all of the days, most of the confirmed are always in the 20s age group, this "
-    #    + "may be due to the fact that this people are the most socially active (universities, dating, hanging out) they are also the group which tends to be\
-    #    the most irresponsible, also a psychological factor is that covid is not really mortal for this age group"
-    # )
-    # st.subheader("Cummulative information (Trends)")
-    # st.plotly_chart(
-    #   get_cumulative(),
-    #  use_container_width=True,
-    # )
-    #   st.caption(
-    #      "As we mentioned before, and can be seen here the mortality rate for the 20s age group is null, and the older you get the more deadly the \
-    #         disease is, more than covid this may be due to pre-existing conditions. As per the end date of the data the curves seems to be flattening out"
-    #    + "so we may think that at this point everything is controlled, however we know now new waves ocurred"
-    # )
+        st.subheader("Time age Histogram by date")
+        start_time = st.slider(
+            "When do you start?",
+            value=datetime.datetime(2020, 3, 20),
+            min_value=datetime.datetime(2020, 3, 2),
+            max_value=datetime.datetime(2020, 6, 30),
+            format="YY/MM/DD",
+        )
+        z = str(start_time).split("-")
+        z[-1] = z[-1][:2]
+        start = "-".join(z)
+        st.write("Start time:", start)
+        col1, col2 = st.columns(2)
+        with col1:
+            st.dataframe(data_dict["timeage"].head(8))
+        with col2:
+            st.dataframe(data_dict["timeage"].describe())
+        st.subheader("Confirmed and Deceased people by date")
+        st.plotly_chart(
+            get_hist_by_date(start),
+        )
+        st.caption(
+            "In this dataset, there is data for each of the age groups for 121 days from 2020-03-02 to 2020-06-30, there are 9 age groups \
+            [0s,10s,20s,30s,40s,50s,60s,70s,80s,90s], through all of the days, most of the confirmed are always in the 20s age group, this "
+            + "may be due to the fact that this people are the most socially active (universities, dating, hanging out) they are also the group which tends to be\
+            the most irresponsible, also a psychological factor is that covid is not really mortal for this age group"
+        )
+        st.subheader("Cummulative information (Trends)")
+        st.plotly_chart(
+            get_cumulative(),
+            use_container_width=True,
+        )
+        st.caption(
+            "As we mentioned before, and can be seen here the mortality rate for the 20s age group is null, and the older you get the more deadly the \
+                disease is, more than covid this may be due to pre-existing conditions. As per the end date of the data the curves seems to be flattening out"
+            + "so we may think that at this point everything is controlled, however we know now new waves ocurred"
+        )
     if panel == "Time vs Region":
         st.subheader("Confirmed Cases by region")
 
@@ -216,7 +214,6 @@ if not panel2:
             st.dataframe(data_dict["region"].head(8))
         with col2:
             st.dataframe(data_dict["region"].describe())
-        st.subheader("Elderly population, maybe plot a bit more in this section")
         option = st.radio(
             "How do you want to sort the order?",
             ("Percentage", "Population"),
@@ -228,7 +225,36 @@ if not panel2:
         )
         st.caption(
             "The number of elderly people does not seem to bear any correlation to confirmed infections, this seems to indicate that transmission\
-             is the same regardless of age, the bars are ordered by confirmed cases"
+             is the same regardless of age, the bars are ordered by confirmed cases, we may now take a look at the geographical distribution"
+        )
+        option = st.radio(
+            "Which plot do you want to see?",
+            (
+                "Elderly Popularion Ratio",
+                "Elderly Alone Ratio",
+                "Nursing Homes",
+                "Academy Ratio",
+                "Universities",
+                "Kindergardens",
+                "Elementary Schools",
+            ),
+            horizontal=True,
+        )
+        dics = {
+            "Elderly Popularion Ratio": "elderly_population_ratio",
+            "Elderly Alone Ratio": "elderly_alone_ratio",
+            "Nursing Homes": "nursing_home_count",
+            "Academy Ratio": "academy_ratio",
+            "Universities": "university_count",
+            "Kindergardens": "kindergarten_count",
+            "Elementary Schools": "elementary_school_count",
+        }
+        st.plotly_chart(regionplot(dics[option]))
+        st.caption(
+            "From this plots we can draw some important information, the elderly popularion ratio is more or less homogeneous in provinces\
+                however there are way more infections in Daegu, where the elderly alone ratio is standard, but the number of nursing homes is really small"
+            + " thus those elderly not living alone are in risk of contracting the virus from younger family members who may not worry as much because \
+                it is not deadly for them, we see no strong correlation between the academic institutions and infections or death rate (in the plot there is the mean for the province)"
         )
     if panel == "Time Gender":
         st.subheader("Data about gender in time")
@@ -446,6 +472,10 @@ if not panel2:
                 this points out to some people quarantining less than others, the distance between the peaks however indicates they quarantined long"
             + " enough, all of the outliers occurred in near the peaks in april and june, they may have happened because many cases where incoming and \
                 the data entry got slopy"
+        )
+        st.plotly_chart(regionplotcase())
+        st.caption(
+            "In the end we can see how the infection was distributed geographically"
         )
     if panel == "Search Trend":
         st.caption(
