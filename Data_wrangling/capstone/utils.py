@@ -34,11 +34,10 @@ def wrangle(folder: str) -> DataDict:
     Stores a dictionary of Dataframes for each of the csv files in the data directory
     """
     data_list = glob.glob(f"{folder}/*.csv")
-    names = [x.split("/")[-1].split(".")[0].lower() for x in data_list]
+    names = ['case', 'patientinfo', 'policy', 'region', 'searchtrend', 'seoulfloating', 'time', 'timeage', 'timegender', 'timeprovince', 'weather']
     data_dict = {}
     for i in range(len(data_list)):
         data_dict[names[i]] = pd.read_csv(data_list[i])
-    print(data_dict.keys())
     return data_dict
 
 
