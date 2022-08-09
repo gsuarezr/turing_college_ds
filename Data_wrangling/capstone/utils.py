@@ -49,8 +49,8 @@ def wrangle(folder: str) -> DataDict:
         "weather",
     ]
     data_dict = {}
-    for i in range(len(data_list)):
-        data_dict[names[i]] = pd.read_csv(data_list[i])
+    # for i in range(len(data_list)):
+    #   data_dict[names[i]] = pd.read_csv(data_list[i])
     return data_list
 
 
