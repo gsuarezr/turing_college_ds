@@ -17,6 +17,7 @@ from sklearn.preprocessing import StandardScaler
 import urllib
 import requests
 import os
+
 colors = px.colors.qualitative.Plotly
 pd.options.plotting.backend = "plotly"
 
@@ -33,12 +34,26 @@ def wrangle(folder: str) -> DataDict:
 
     Stores a dictionary of Dataframes for each of the csv files in the data directory
     """
-    data_list = glob.glob(f"{os.path.dirname(os.path.abspath(__file__))}+/{folder}/*.csv")
-    names = ['case', 'patientinfo', 'policy', 'region', 'searchtrend', 'seoulfloating', 'time', 'timeage', 'timegender', 'timeprovince', 'weather']
+    data_list = glob.glob(
+        f"{os.path.dirname(os.path.abspath(__file__))}+/{folder}/*.csv"
+    )
+    names = [
+        "case",
+        "patientinfo",
+        "policy",
+        "region",
+        "searchtrend",
+        "seoulfloating",
+        "time",
+        "timeage",
+        "timegender",
+        "timeprovince",
+        "weather",
+    ]
     data_dict = {}
     for i in range(len(data_list)):
         data_dict[names[i]] = pd.read_csv(data_list[i])
-    return data_dict
+    return data_list
 
 
 def get_nominatim_geocode(address: str) -> tuple[str, str]:
@@ -286,8 +301,8 @@ def get_cum_sex(option: str) -> Figure:
 
 def get_cum_test(daily: str = "Cummulative") -> Figure:
     """
-    This function takes a string, if it is equal to daily then it computes the 
-    daily results of tests and plots them, otherwise it does the same for the 
+    This function takes a string, if it is equal to daily then it computes the
+    daily results of tests and plots them, otherwise it does the same for the
     cummulative results
     """
     data_dict = wrangle("data")
@@ -315,7 +330,7 @@ def get_cum_test(daily: str = "Cummulative") -> Figure:
     return fig
 
 
-def group()->Figure:
+def group() -> Figure:
     """
     This function compues a pie about infection cases, specifically the percentages of group vs individual infections
     """
@@ -339,11 +354,11 @@ def group()->Figure:
     return fig
 
 
-def path(n:int, location:str=False):
+def path(n: int, location: str = False):
     """
     This function returns a plot about the most common paths of infection, it's arguments are
     n which denotes the number of elements to consider (the rest are set to the other category)
-    and location which when set to city looks at the paths of infection by city, not globally 
+    and location which when set to city looks at the paths of infection by city, not globally
     """
     data_dict = wrangle("data")
     data = data_dict["case"]
@@ -389,7 +404,7 @@ def path(n:int, location:str=False):
     return fig
 
 
-def weather(option:string="Humidity", date:bool=False)->Figure:
+def weather(option: string = "Humidity", date: bool = False) -> Figure:
     """
     This function plots the average whete if bool equals false, otherwise it does so by date,
     option denotes the weather characteristic to plot.
@@ -429,7 +444,7 @@ def weather(option:string="Humidity", date:bool=False)->Figure:
     return fig
 
 
-def temp(date:bool=False)->Figure:
+def temp(date: bool = False) -> Figure:
     """
     This function plots the average temperature, plus the max and min over the Covid period unless date is set to True,
     Then it plots the average,max and min by date
@@ -477,7 +492,7 @@ def temp(date:bool=False)->Figure:
     return fig
 
 
-def get_cum_weather(option:str)->Figure:
+def get_cum_weather(option: str) -> Figure:
     """
     This function plots the time series data of the weather
     """
@@ -508,9 +523,11 @@ def get_cum_weather(option:str)->Figure:
     return fig
 
 
-def contact(cut:int=7e10, describe:bool=False, confirmed:bool=False, min:bool=False)->Figure:
+def contact(
+    cut: int = 7e10, describe: bool = False, confirmed: bool = False, min: bool = False
+) -> Figure:
     """
-    This function plots the distribution for the contact number of infected patients, if describe 
+    This function plots the distribution for the contact number of infected patients, if describe
     equals true it instead returns a dataframe with the summary of the data, if confirmed equals true
     it returns a bar instead of a violin/jittered/box plot. if min is true then it sets the minimum contact
     number to 1
@@ -588,9 +605,9 @@ def contact(cut:int=7e10, describe:bool=False, confirmed:bool=False, min:bool=Fa
 
 
 def searchtrend(
-    date1:datetime,
-    date2:datetime,
-)->Figure:
+    date1: datetime,
+    date2: datetime,
+) -> Figure:
     """
     This function takes two dates as input and then plots the search trend time series on naver (of infectious diseases)
     between those two dates
@@ -608,9 +625,9 @@ def searchtrend(
     return fig
 
 
-def policies()->Figure:
+def policies() -> Figure:
     """
-    This function plots a pie plot about the types of policies that were implemented in S. Korea during the COVID-19 
+    This function plots a pie plot about the types of policies that were implemented in S. Korea during the COVID-19
     pandemic
     """
     data_dict = wrangle("data")
@@ -627,7 +644,7 @@ def policies()->Figure:
     return fig
 
 
-def policies_dates()->Figure:
+def policies_dates() -> Figure:
     """
     This function plots a violin plot and a jittered plot of the distribution of dates on which policies started
     """
@@ -654,7 +671,7 @@ def policies_dates()->Figure:
     return fig
 
 
-def policies_month()->Figure:
+def policies_month() -> Figure:
     """
     This function returns a bar chart about the number of policies implemented each month during the COVID 19
     pandemic in south korea
@@ -680,11 +697,11 @@ def policies_month()->Figure:
     return fig
 
 
-def get_trend_con(regression:bool=False, lag:int=0)->Figure:
+def get_trend_con(regression: bool = False, lag: int = 0) -> Figure:
     """
-    This function plots the search trend of coronavirus on the naver platform and the confirmed number 
+    This function plots the search trend of coronavirus on the naver platform and the confirmed number
     of cases in S.Korea, if regression equals true it also builds a linear regression model shifted by lag days
-    and returns a plot of the model and the real data 
+    and returns a plot of the model and the real data
     """
     data_dict = wrangle("data")
     one = data_dict["searchtrend"]
@@ -762,7 +779,7 @@ def get_trend_con(regression:bool=False, lag:int=0)->Figure:
     return fig
 
 
-def arima(update:bool=False)->Figure:
+def arima(update: bool = False) -> Figure:
     """
     This function performs AutoRegressive Integrated Moving Average and walk forward validation (if update is True)
     on the confirmed daily covid cases in S. Korea, we then use this to predict future values with or withouth walking forward validation.
@@ -803,7 +820,7 @@ def arima(update:bool=False)->Figure:
     return fig
 
 
-def pca_data(data:bool=False)->Figure:
+def pca_data(data: bool = False) -> Figure:
     """
     This function creates a dataset from the csv files we believe are useful for forecasting and applies pca on them. if data=True
     then it returns the dataset. otherwise it returns a plot of the PCA components
@@ -829,7 +846,7 @@ def pca_data(data:bool=False)->Figure:
     return fig
 
 
-def seoulpop(x:str="Population")->Figure:
+def seoulpop(x: str = "Population") -> Figure:
     """
     This function returns a chart about seouls floating population according to the variable x. if x is population
     then it returns a barchar of the mean floating population by date, if gender then it returns a pie plot about the genders
