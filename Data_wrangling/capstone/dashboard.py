@@ -8,9 +8,10 @@ from plotly.subplots import make_subplots
 import plotly.graph_objects as go
 from utils import *
 from plotly.subplots import make_subplots
-
+import os
 pd.options.plotting.backend = "plotly"
-st.sidebar.image("logo.svg")
+st.sidebar.image(os.path.dirname(os.path.abspath(__file__))
++"/logo.svg")
 data_dict = wrangle("data")
 
 
