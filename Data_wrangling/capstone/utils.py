@@ -49,9 +49,9 @@ def wrangle(folder: str) -> DataDict:
         "weather",
     ]
     data_dict = {}
-    # for i in range(len(data_list)):
-    #   data_dict[names[i]] = pd.read_csv(data_list[i])
-    return data_list
+    for i in range(len(data_list)):
+        data_dict[names[i]] = pd.read_csv(data_list[i])
+    return data_dict
 
 
 def get_nominatim_geocode(address: str) -> tuple[str, str]:

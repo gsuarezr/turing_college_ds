@@ -128,7 +128,7 @@ if panel2 == "Forecasting":
     )
 if not panel2:
     if panel == "Time vs Age":
-        st.write(f"{data_dict}")
+        st.write(f"{data_dict.keys()}")
         # To make this panel better get information of the population in south korea
     #       st.subheader("Time age Histogram by date")
     #      start_time = st.slider(
