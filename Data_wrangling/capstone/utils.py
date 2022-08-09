@@ -38,6 +38,7 @@ def wrangle(folder: str) -> DataDict:
     data_dict = {}
     for i in range(len(data_list)):
         data_dict[names[i]] = pd.read_csv(data_list[i])
+    print(data_dict.keys())
     return data_dict
 
 
